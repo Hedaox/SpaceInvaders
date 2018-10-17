@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Space Invaders Acceuil</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="../../src/lib/three.js"></script>
+		<script src="../../src/js/game.js"></script>
+		<script src="../js/fonctions.js"></script>
+		<script>
+		"use strict"
+
+		    var scene = new THREE.Scene();
+		    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+		    var renderer = new THREE.WebGLRenderer();
+		    renderer.setSize( window.innerWidth, window.innerHeight );
+		    document.body.appendChild( renderer.domElement );
+
+		    var loader = new THREE.FontLoader();
+
+		    //save Verification & Creation
+
+		    var currentSave = localStorage.getItem('save');
+
+			if(currentSave === 'undefined')
+			{
+		    	var save = { "name":"AAA","score": 0,"level": 1};
+		    }
+		    else if(currentSave !== 'undefined')
+		    {
+		    	var save = JSON.parse(currentSave);
+		    }
+
+		    var stringSave = JSON.stringify(save);
+		    localStorage.setItem('save', stringSave);
+		    var JSONSave = JSON.parse(localStorage.getItem('save'));
+	    	var name = JSONSave.name;
+
+		    //Acceuil
+		    loader.load( 'JSON/font.json', function ( font ) {
+
+    			//Title Text
+                var geometryTextTitle = new THREE.TextGeometry( 'Nouvelle Partie', {font: font, size: 2, height: 0} );
+                var materialTextTitle = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+                var meshTextTitle = new THREE.Mesh( geometryTextTitle, materialTextTitle );
+                scene.add(new THREE.AmbientLight(0xbfbfbf));
+                scene.add( meshTextTitle );
+
+                meshTextTitle.position.x = -18;
+                meshTextTitle.position.y = 5;
+
+                //Name Text
+                var geometryTextName = new THREE.TextGeometry( 'Nom : ' + JSONSave.name, {font: font, size: 1, height: 0} );
+                var materialTextName = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+                var meshTextName = new THREE.Mesh( geometryTextName, materialTextName );
+                scene.add(new THREE.AmbientLight(0xbfbfbf));
+                scene.add( meshTextName );
+
+                meshTextName.position.x = -17;
+                meshTextName.position.y = 0;
+                meshTextName.scale.x = 1.1;
+
+                var positionName = true;
+                var enteringName = false;
+
+                //LineCursor
+			    var geometryLineCursor = new THREE.BoxGeometry( 1, 0.1, 0.1 );
+			    var materialLineCursor = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+			    var meshLineCursor = new THREE.Mesh( geometryLineCursor, materialLineCursor );
+			    meshLineCursor.position.x = -8.77;
+			  	meshLineCursor.position.y = -0.2;
+
+			  	var cursorPosition = 1;
+
+                
+                //Start Game Text
+               	var geometryTextStartGame = new THREE.TextGeometry( 'Commencer Partie', {font: font, size: 1, height: 0} );
+                var materialTextStartGame = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+                var meshTextStartGame = new THREE.Mesh( geometryTextStartGame, materialTextStartGame );
+				scene.add(new THREE.AmbientLight(0xbfbfbf));
+				scene.add( meshTextStartGame );
+
+                meshTextStartGame.position.x = -17;
+                meshTextStartGame.position.y = -2;
+                meshTextStartGame.scale.x = 1;
+
+                var positionStartGame = false;
+
+                //ReturnMenu Text
+                var geometryTextReturnMenu = new THREE.TextGeometry( 'Retour au Menu', {font: font, size: 1, height: 0} );
+                var materialTextReturnMenu = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+                var meshTextReturnMenu = new THREE.Mesh( geometryTextReturnMenu, materialTextReturnMenu );
+                scene.add(new THREE.AmbientLight(0xbfbfbf));
+                scene.add( meshTextReturnMenu );
+
+                meshTextReturnMenu.position.x = -17;
+                meshTextReturnMenu.position.y = -4;
+
+                var positionReturnMenu = false;
+
+                //KeyOption Handler, update every time a key is pressed
+			    //Used for one time key press
+			    document.addEventListener('keydown',onDocumentKeyDown,false);
+				function onDocumentKeyDown(event){
+					event = event || window.event;
+					var keycode = event.keyCode;
+
+					//Prevent Key Handling by your Browser
+					event.preventDefault();
+
+			        //Move to StartGame Button
+			        if( keycode == 40 && positionName == true && enteringName == false || 
+			        	keycode == 38 && positionReturnMenu == true && enteringName == false)
+			        {
+			        	positionName = false;
+			        	positionStartGame = true;
+			        	positionReturnMenu = false;
+
+			        	meshTextStartGame.material.color.setHex( 0xffffff );
+			        	meshTextName.material.color.setHex( 0x00ff00 );
+			        	meshTextReturnMenu.material.color.setHex( 0x00ff00 );
+			        	meshTextStartGame.scale.x = 1.1;
+			        	meshTextName.scale.x = 1;
+			        	meshTextReturnMenu.scale.x = 1;
+			        }
+
+					//Move to ReturnMenu Button
+			        else if(keycode == 40 && positionStartGame == true && enteringName == false || 
+			        		keycode == 40 && positionName == true && enteringName == false)
+			        {
+			        	positionName = false;	
+			        	positionStartGame = false;
+			        	positionReturnMenu = true;
+
+			        	meshTextReturnMenu.material.color.setHex( 0xffffff );
+			        	meshTextName.material.color.setHex( 0x00ff00 );
+			        	meshTextStartGame.material.color.setHex( 0x00ff00 );
+			        	meshTextReturnMenu.scale.x = 1.1;
+			        	meshTextName.scale.x = 1;
+			        	meshTextStartGame.scale.x = 1;
+			        }
+
+			        //Move to Name Button
+			        else if(keycode == 38 && positionStartGame == true && enteringName == false ||
+			        		keycode == 38 && positionReturnMenu == true && enteringName == false)
+			       	{
+			        	positionName = true;
+			        	positionStartGame = false;
+			        	positionReturnMenu = false;
+
+			       		meshTextName.material.color.setHex( 0xffffff );
+			       		meshTextReturnMenu.material.color.setHex( 0x00ff00 );
+			       		meshTextStartGame.material.color.setHex( 0x00ff00 );
+			       		meshTextName.scale.x = 1.1;
+			       		meshTextStartGame.scale.x = 1;
+			       		meshTextReturnMenu.scale.x = 1;
+			       	}
+
+			       	//Name
+			       	else if(keycode == 32 && positionName == true && enteringName == false || 
+			       			keycode == 13 && positionName == true && enteringName == false)
+			       	{
+			       		enteringName = true;
+			       		scene.add( meshLineCursor );
+			       	}
+
+			       	//Entering char
+		       		else if (keycode >= 65 && keycode <= 105 && positionName == true && enteringName == true)
+		       		{
+		       			if(cursorPosition == 1)
+		       			{		       			
+		       				save = { "name": event.key.toUpperCase() + JSONSave.name[1] + JSONSave.name[2],"score": 0,"level": 1};
+		       			}
+		       			else if(cursorPosition == 2)
+		       			{
+			       			save = { "name": JSONSave.name[0] + event.key.toUpperCase() + JSONSave.name[2],"score": 0,"level": 1};
+		       			}
+		       			else if(cursorPosition == 3)
+		       			{
+		       				save = { "name": JSONSave.name[0] + JSONSave.name[1] + event.key.toUpperCase() ,"score": 0,"level": 1};
+		       			}		       			
+		       			stringSave = JSON.stringify(save);
+					    localStorage.setItem('save', stringSave);
+					    JSONSave = JSON.parse(localStorage.getItem('save'));
+
+					    scene.remove( meshTextName );
+
+					    geometryTextName = new THREE.TextGeometry( 'Nom : ' + JSONSave.name, {font: font, size: 1, height: 0} );
+		                materialTextName = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+		                meshTextName = new THREE.Mesh( geometryTextName, materialTextName );
+		                scene.add(new THREE.AmbientLight(0xbfbfbf));
+		                scene.add( meshTextName );
+
+		                meshTextName.position.x = -17;
+		                meshTextName.position.y = 0;
+		                meshTextName.scale.x = 1.1;
+
+		       		}
+
+		       		else if(keycode == 32 && positionName == true && enteringName == true || 
+		       				keycode == 13 && positionName == true && enteringName == true)
+		       		{
+		       			scene.remove( meshLineCursor );
+		       			enteringName = false;
+		       		}
+
+			        else if(keycode == 39 && positionName == true && enteringName == true && cursorPosition == 1)
+			        {
+			              meshLineCursor.position.x = -7.5;
+			              cursorPosition = 2;
+			        }
+
+			        else if(keycode == 39 && positionName == true && enteringName == true && cursorPosition == 2)
+			        {
+			              meshLineCursor.position.x = -6.25;
+			              cursorPosition = 3;
+			        }
+
+			        else if(keycode == 37 && positionName == true && enteringName == true && cursorPosition == 3)
+			        {
+			              meshLineCursor.position.x = -7.5;
+			              cursorPosition = 2;
+			        }
+
+			        else if(keycode == 37 && positionName == true && enteringName == true && cursorPosition == 2)
+			        {
+			              meshLineCursor.position.x = -8.77;
+			              cursorPosition = 1;
+			        }
+
+			       	//StartGame
+			       	else if(keycode == 32  && positionStartGame == true || keycode == 13 && positionStartGame == true)
+			       	{
+
+			       		location.href = "inGame.html";
+			       	}
+
+			       	//StartGame
+			       	else if(keycode == 32 && positionReturnMenu == true || keycode == 13 && positionReturnMenu == true)
+			       	{
+
+			       		location.href = "acceuil.html";
+			       	}
+
+			        //Help Window
+			        if(keycode == 72 && enteringName == false)
+			        {
+			        	help();
+			        }
+
+			    }
+
+		     } );
+		    
+		   
+		    //camera
+		    camera.rotation.x = 0;
+		    camera.rotation.y = 0;
+		    camera.rotation.z = 0;
+		    camera.position.x = 0;
+		    camera.position.y = 0;
+		    camera.position.z = 20;
+		    var cameraPosition1 = false;
+
+		    //game loop, update every frame
+		    var animate = function () {
+		        requestAnimationFrame( animate );
+
+		        renderer.render(scene, camera);
+
+
+		    };
+
+		    animate();
+
+		</script>
+	</body>
+</html>

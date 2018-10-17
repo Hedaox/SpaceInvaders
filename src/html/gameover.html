@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Space Invaders Acceuil</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="../../src/lib/three.js"></script>
+		<script src="../../src/js/game.js"></script>
+		<script src="../js/fonctions.js"></script>
+		<script>
+			"use strict"
+			//Preparing scene
+		    var scene = new THREE.Scene();
+		    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+
+		    var renderer = new THREE.WebGLRenderer();
+		    renderer.setSize( window.innerWidth, window.innerHeight );
+		    document.body.appendChild( renderer.domElement );
+
+		    var loader = new THREE.FontLoader();
+
+		    loader.load( 'JSON/font.json', function ( font ) {
+
+    			//Game Over Text
+                var geometryTextTitle = new THREE.TextGeometry( 'Game Over', {font: font, size: 3, height: 0} );
+    
+                var materialTextTitle = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+                var meshTextTitle = new THREE.Mesh( geometryTextTitle, materialTextTitle );
+                scene.add(new THREE.AmbientLight(0xbfbfbf));
+                scene.add( meshTextTitle );
+
+                meshTextTitle.position.x = -15;
+                meshTextTitle.position.y = 5;
+
+                //Restart Text
+                var geometryTextRestart = new THREE.TextGeometry( 'Recommencer', {font: font, size: 1, height: 0} );
+                var materialTextRestart = new THREE.MeshPhongMaterial( { color: 0xffffff } );
+                var meshTextRestart = new THREE.Mesh( geometryTextRestart, materialTextRestart );
+                scene.add(new THREE.AmbientLight(0xbfbfbf));
+                scene.add( meshTextRestart );
+
+                meshTextRestart.position.x = -17;
+                meshTextRestart.position.y = 0;
+                meshTextRestart.scale.x = 1.1;
+
+                var positionRestart = true;
+
+                //Return Text
+                var geometryTextReturn = new THREE.TextGeometry( 'Retourner au menu', {font: font, size: 1, height: 0} );
+                var materialTextReturn = new THREE.MeshPhongMaterial( { color: 0x00ff00 } );
+                var meshTextReturn = new THREE.Mesh( geometryTextReturn, materialTextReturn );
+                scene.add(new THREE.AmbientLight(0xbfbfbf));
+                scene.add( meshTextReturn );
+
+                meshTextReturn.position.x = -17;
+                meshTextReturn.position.y = -2;
+
+                var positionReturn = false;
+
+                //KeyOption Handler, update every time a key is pressed
+			    //Used for one time key press
+			    document.addEventListener('keydown',onDocumentKeyDown,false);
+				function onDocumentKeyDown(event){
+					event = event || window.event;
+					var keycode = event.keyCode;
+
+					//Prevent Key Handling by your Browser
+					event.preventDefault();
+
+					//Move to Return Button
+			        if(keycode == 40)
+			        {
+			        	positionReturn = true;
+			        	positionRestart = false;
+
+			        	meshTextReturn.material.color.setHex( 0xffffff );
+			        	meshTextRestart.material.color.setHex( 0x00ff00 );
+			        	meshTextReturn.scale.x = 1.1;
+			        	meshTextRestart.scale.x = 1;
+			        }
+
+			        //Move to Restart Button
+			        if(keycode == 38)
+			       	{
+			       		positionReturn = false;
+			        	positionRestart = true;
+
+			       		meshTextRestart.material.color.setHex( 0xffffff );
+			       		meshTextReturn.material.color.setHex( 0x00ff00 );
+			       		meshTextRestart.scale.x = 1.1;
+			       		meshTextReturn.scale.x = 1;
+			       	}
+
+			       	//Restart
+			       	if(keycode == 32 || keycode == 13  && positionRestart == true)
+			       	{
+			       		location.href = "inGame.html";
+			       	}
+			       	
+			       	//Go to Menu
+			       	if(keycode == 32 || keycode == 13  && positionReturn == true)
+			       	{
+			       		location.href = "acceuil.html";
+			       	}
+
+			        //Help Window
+			        if(keycode == 72)
+			        {
+			        	help();
+			        }
+			    }
+
+		     } );
+		    
+		   
+		    //camera
+		    camera.rotation.x = 0;
+		    camera.rotation.y = 0;
+		    camera.rotation.z = 0;
+		    camera.position.x = 0;
+		    camera.position.y = 0;
+		    camera.position.z = 20;
+		    var cameraPosition1 = false;
+
+		    //game loop, update every frame
+		    var animate = function () {
+		        requestAnimationFrame( animate );
+
+		        renderer.render(scene, camera);
+		    };
+
+		    animate();
+
+		</script>
+	</body>
+</html>

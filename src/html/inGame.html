@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Space Invaders</title>
+		<style>
+			body { margin: 0; background-color: black}
+			canvas { width: 100%; height: 100% }
+            div { display: inline-block}
+            #level { float: left}
+            #nom { float: left; margin-left: 40px }
+            #vie { float: right; margin-right: 200px }
+            #score { float: right; margin-right: 100px }
+		</style>
+	</head>
+	<body>
+    	<strong><div id="level"></div></strong><div id="nom"></div>
+		<div id="score"></div><div id="vie"></div>
+        
+		<script src="../lib/three.js"></script>
+		<script src="../lib/OBJLoader.js"></script>
+		<script src="../js/game.js"></script>
+		<script src="../js/fonctions.js"></script>
+		<script>
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth/window.innerHeight, 0.1, 1000 );
+            var manager = new THREE.LoadingManager(); 
+            
+			//3D object
+            var loader = new THREE.OBJLoader(manager);
+		    var playerMesh;
+		    var enemyBonusModel;
+            var enemyModel1 = {};
+            
+            //Audio
+            var listener = new THREE.AudioListener();
+            camera.add( listener );
+            var sound = new THREE.Audio( listener );
+            var audioLoader = new THREE.AudioLoader(manager);
+            var shootSoundBuffer;
+            var boomSoundBuffer;
+            var boomSoundBuffer1;
+            var winSoundBuffer;
+            var looseSoundBuffer;
+            
+		    manager.onLoad = function(){     
+					//Save Recovery
+				    var currentSave = localStorage.getItem('save');
+
+				    var save = JSON.parse(currentSave);
+
+				    var stringSave = JSON.stringify(save);
+				    localStorage.setItem('save', stringSave);
+				    var JSONSave = JSON.parse(localStorage.getItem('save'));
+
+				    switch(JSONSave.level)
+				    {
+				    	case 1:
+		            		game(1);
+		            	break;
+		            	case 2:
+		            		game(2);
+		            	break;
+		            	case 3:
+		            		game(3);
+		            	break;
+		            	default:
+		            		alert("Niveau inexistant, la sauvegarde est peut-être non existante ou corrompue. Aller dans nouvelle partie pour créer ou recréer une sauvegarde.");
+		            		location.href = "acceuil.html";
+		            	break;
+		            }
+	            };
+
+            //Loading...
+            loader.load( '../medias/models/3DSprites.obj', function(object){ 
+            	playerMesh = object.children[33];
+            	enemyBonusModel = object.children[34];
+                for (var i = 0; i < 11; i++)
+                {
+                    enemyModel1[i] = object.children[i+22];
+                }
+                for (var i = 0; i < 11; i++)
+                {
+                    enemyModel1[i+11] = object.children[i+11];
+                }
+                for (var i = 0; i < 11; i++)
+                {
+                    enemyModel1[i+22] = object.children[i];
+                }
+            });
+            audioLoader.load( '../medias/sounds/shoot.wav', function( buffer ) {
+                 shootSoundBuffer = buffer;
+            });
+            audioLoader.load( '../medias/sounds/boom.wav', function( buffer ) {
+                 boomSoundBuffer = buffer;
+            });
+            audioLoader.load( '../medias/sounds/boom1.wav', function( buffer ) {
+                 boomSoundBuffer1 = buffer;
+            });
+            audioLoader.load( '../medias/sounds/win.wav', function( buffer ) {
+                 winSoundBuffer = buffer;
+            });
+            audioLoader.load( '../medias/sounds/loose.wav', function( buffer ) {
+                 looseSoundBuffer = buffer;
+            });
+		</script>
+	</body>
+</html>
