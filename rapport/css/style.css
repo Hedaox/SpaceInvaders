@@ -1,0 +1,20 @@
+@font-face {
+    font-family: 'olney';
+    src: url('olney_light.otf') format('otf'),
+}
+
+*
+{
+	font-family: olney, verdana;
+    color: white
+}
+
+#head
+{
+    text-align: center;
+}
+
+body
+{
+    background-color: #111111
+}

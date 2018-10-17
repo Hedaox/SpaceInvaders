@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Space Invaders Rapport</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+        <link rel="stylesheet" type="text/css" href="../css/style.css">
+	</head>
+	<body>
+    <div id="head">
+		<h1>Rapport Space Invaders<h1/>
+        <h2>par Joan Rey-Bethbeder<h2/>
+        <a href="https://wwwetud.univ-pau.fr/~jrbethbeder/SIA/src/html/acceuil.html">
+        <img src="../images/SpacesInvaders3D.JPG" alt="SpacesInvaders3D"></a>
+    </div>
+            <h3>Deroulement du jeu<h3/>
+            <ul>
+              <li>Ecran d'accueil</li>
+              <p>Un simple écran d'acceuil qui affiche le nom du jeu, le nom du développeur, 
+              les aliens et leurs points correspondants et attend un événement pour commencer
+              une partie, sélection d'un menu (les options ne sont pas encore implémentés). </p>
+              <img src="../images/acceuil.JPG" alt="acceuil">
+              <li>Le jeu</li>
+              <p>Le jeu se présente comme ceci : </p>
+              <img src="../images/game.JPG" alt="game">
+              <li>Missiles joueur</li>
+              <p>Le joueur peut tirer des missiles en appuyant sur ESPACE. </p>
+              <img src="../images/missile.JPG" alt="missile">
+              <li>Aliens</li>
+              <p>Le joueur peut tirer ces missiles sur des aliens afin de les détruire, mais les aliens
+                 peuvent contre-attaquer.</p>
+              <img src="../images/aliens.JPG" alt="aliens">
+              <li>Abris</li>
+              <p>Pour ce protéger le joueur dispose d'abris qui peuvent être détruit par des tirs de missiles.</p>
+              <p>Ici un abris neuf.</p>
+              <img src="../images/shield0.JPG" alt="shield0">
+              <p>Un qui est un peu amoché.</p>
+              <img src="../images/shield1.JPG" alt="shield1">
+              <p>Un qui est presque détruit.</p>
+              <img src="../images/shield2.JPG" alt="shield2">
+              <li>Vie Joueur</li>
+              <p>Le joueur possède 3 vies, cela est affiché en HUD en haut à droite. Il en perd un à chaque 
+              fois qu'il se fait toucher par un missile d'un alien</p>
+              <img src="../images/vie.JPG" alt="vie">
+              <li>Score Joueur</li>
+              <p>Pour chaque aliens tués le score augmente, le score est affiché à côté de la vie.</p>
+              <img src="../images/score.JPG" alt="score">
+              <li>Game over et Retour Acceuil</li>
+              <p>Lorsque le joueur n'a plus de vie ou que les aliens sont arriver en bas de l'écran c'est un Game Over.
+              Un écran apparaît alors, le joueur a le choix de retenter sa chance ou de retourner au menu.</p>
+              <img src="../images/gameover.JPG" alt="gameover">
+            </ul> 
+            <h3>Technologies logicielles<h3/>
+            <ul>
+              <li>Tourne sur navigateur</li>
+              <p> Le jeu tourne sur un navigateur. Il a été surtout développé pour Firefox.<p>
+              <img src="../images/nav.JPG" alt="nav">
+              <li>Utilisation de Three.js (3D)</li>
+              <p> La bibliothèque qu'utilise ce jeu est THREE.js afin de réaliser des rendu 3D. </p>
+              <img src="../images/three.JPG" alt="three">
+            </ul> 
+            <h3>Graphisme<h3/>
+            <ul>
+              <li>Aspect 3D</li>
+              <p> Le texte dans les menus est en 3D. Les abris, la barre de limite sont de simples cubes.  
+              Ensuite les ennemis et le joueur ont été modéliser sur blender puis importé en format .obj . </p>
+              <img src="../images/blender.JPG" alt="blender">
+              <p>(Le fichier .obj contient tout les modèles en même temps)</p>
+              <img src="../images/enemy.JPG" alt="enemy">
+              <li>Décors 3D</li>
+              <p>Le décor 3D est une skybox représentant une vue depuis l'espace près d'un planète. 
+              Cette skybox est en faite juste un simple cube placé assez loin et qui tourne autour de la scène.</p>
+              <img src="../images/skybox.JPG" alt="skybox">
+            </ul> 
+            <h3>Dialogues avec l'utilisateur<h3/>
+            <ul>
+              <li>Message transition niveau</li>
+              <p>A chaque fois que l'utilisateur perd ou gagne un niveau un écran le lui signale. Nous avons déjà vu le Game Over.
+              Voici le Game Win :<p>
+              <img src="../images/gamewin.JPG" alt="gamewin">
+              <p>Cette écran apparaît uniquement une fois que tous les aliens sont morts. On peut voire le score 
+              final de la partie et on peut passer au prochain niveau ou revenir au menu principal</p>
+              <li>[H]--> raccourcis clavier</li>
+              <p> Appuyer sur cette touche permet de faire apparaître une petite fenètre d'aide pour les raccourcis. </p>
+              <img src="../images/help.JPG" alt="help">
+            </ul>
+            <h3>Points de vue caméra<h3/>
+            <ul>
+            <p> Différentes caméra ont été mis en place, elles permettent de jouer différement ou d'apprécier la skybox d'un angle 
+            différent. <p/>
+              <li>[0]--> Caméra fixe</li>
+              <p>Caméra classique du genre.</p>
+              <img src="../images/game.JPG" alt="cam0">
+              <li>[1]--> Caméra 3rd person dynamique</li>
+              <p>Idéal pour des tirs de précision</p>
+              <img src="../images/cam1.JPG" alt="cam1">
+              <li>[2]--> Caméra latérale</li>
+              <p>Pas pratique mais donne une vue différente de la skybox.</p>
+              <img src="../images/cam2.JPG" alt="cam2">
+              <li>[3]--> Caméra depuis les Aliens</li>
+              <p>Donne plus de challenge, et une autre perspective de la skybox.</p>
+              <img src="../images/cam3.JPG" alt="cam3">
+            </ul>
+            <h3>Gestions des collisions<h3/>
+            <ul>
+              <li>Collisions Missiles</li>
+              <p>La collision est géré par une fonction très simple</p>
+              <img src="../images/colfct.JPG" alt="colfct">
+              <p> Cette fonction regarde simplement si mesh1 et mesh2 se touchent et renvoie vrai si c'est le cas sinon elle renvoie faux. </p>
+              <li>Métérialisez dégats</li>
+              <p> Les dégats sur les abris sont matérialisé par de la transparence </p>
+              <img src="../images/shield1.JPG" alt="shield1">
+              <p> Ensuite un bruit retentit lors des collisions (voir section Sons). </p>
+            </ul>
+            <h3>Difficulté<h3/>
+            <ul>
+              <li>Accelaration des missiles</li>
+              <p> Pour tirer les aliens attendent que le dernier alien ait finit son action de tirer. Puis le programme choisit 
+              aléatoirement parmis les aliens afin de décider qui va tirer ensuite. Ce qui a pour effet d'augmenter la 
+              concentration des tirs des aliens.<p>
+              <img src="../images/aliens.JPG" alt="aliens">
+              <li>IA vaisseau aliens en fonction des niveaux</li>
+            </ul>
+            <h3>Sons<h3/>
+            <p> Pour créer mes effets sonnores j'ai utilisé <a href="http://sfbgames.com/chiptone">Chip Tone</a>. Les sons sont utilisés 
+            lors des tirs, des collisions, ainsi que pour le moment où le joueur gagne ou perd.</p>
+            <h3>Triche<h3/>
+            <ul>
+              <li>[I]--> Invicibilité + les aliens ne décendent plus.</li>
+              <li>[K]--> Détruit tous les aliens et passe au niveau suivant.</li>
+            </ul>
+            <h3>Petit plus<h3/>
+            <ul>
+              <li>Sauvegarde JSON</li>
+              <p> Lors d'une nouvelle partie, cet écran s'affiche : </p>
+              <img src="../images/newgame.JPG" alt="newgame">
+              <p> A partir de là, le joueur peut choisir un psudo de 3 lettres et commencer la partie. </p>
+              <img src="../images/name.JPG" alt="name">
+              <p> En arrière plan un JSON de ce format : { "name": "JOA","score": 0,"level": 1} vient de se créer dans 
+              le stockage local du navigateur. Si le joueur passe le premier niveau, "level" sera égal à 2 et son score
+              sera retenu dans le JSON.</p>
+              <p> Si par la suite le joueur revient dans le menu principal, il peut alors faire "Charger Partie" et il pourra
+              reprendre depuis là où il s'était arrêté. </p>
+              
+            </ul>
+            <h3>Conclusion<h3/>
+            <p> Ce projet était sans doute l'un des projets les plus interresant et cool que j'ai pu faire.
+            Je trouve dommage que le très grand nombre de rapports, projets, examens en parallèle provenant des autres 
+            matières ne m'ont pas permit de travailler plus sur ce projet. </p>
+	</body>
+</html>
